@@ -1,0 +1,16 @@
+LONG_MOBILE-1       	       0.002 	
+LONG_MOBILE-4       	       0.001 	
+SHORT_MOBILE-25     	       0.000 	
+SHORT_MOBILE-2      	       0.032 	
+SHORT_MOBILE-4      	       0.643 	
+LONG_MOBILE-2       	       0.009 	
+SHORT_MOBILE-1      	       0.036 	
+SHORT_MOBILE-27     	       0.050 	
+SHORT_MOBILE-30     	       0.021 	
+LONG_MOBILE-3       	       5.923 	
+SHORT_MOBILE-24     	       0.000 	
+SHORT_MOBILE-28     	       0.001 	
+SHORT_MOBILE-3      	       0.067 	
+
+AMEAN               	       0.522 	
+
