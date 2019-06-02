@@ -1,7 +1,6 @@
-declare -a test_suits=("perceptron", "2layer", "all_true", "all_false")
+declare -a methods=("perceptron" "2layer" "all_true" "all_false")
 
-for test_suite in "${test_suite[@]}"
+for method in "${methods[@]}"
 do
-	echo "$test_suite"	
-
+	echo "$method"
 done
