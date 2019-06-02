@@ -1,6 +1,7 @@
 #ifndef _PREDICTOR_H_
 #define _PREDICTOR_H_
 
+// #define MY_DEBUG
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -21,30 +22,31 @@ class HistoryTable {
 private:
   int array[HISTTBL_SIZE];
   int ptr;
-  bool isWithinThreshold;
 public:
   HistoryTable();
   void push(int n);
-  bool chk_within_threshold() ;
-  bool pred(const Perceptron &perc);
   int get_val(size_t idx) const;
 };
 
-class Perceptron {
+class NeuralNetwork {
 private:
   int weights[NPERC+1];
+  int recent_y;
+  bool is_within_thr;
 public:
   int get_val(size_t idx) const;
   void set_val(size_t idx, int n);
+  int pred(const HistoryTable &history_table);
   void update(bool isTaken, const HistoryTable &history_table);
+  bool get_is_within_thr(void);
 };
 
 class HashTable {
 private:
-  Perceptron perc[HTBL_SIZE];
+  NeuralNetwork perc[HTBL_SIZE];
   size_t hash(UINT64 idx);
 public:
-  Perceptron& get(UINT64 idx);
+  NeuralNetwork& get(UINT64 idx);
 };
 
 class PREDICTOR {

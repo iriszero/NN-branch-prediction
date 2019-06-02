@@ -6,13 +6,10 @@
 
 
 /////////////// STORAGE BUDGET JUSTIFICATION ////////////////
-
-// 8KB
-
+// 8KB, 32KB, Unlimited
 /////////////////////////////////////////////////////////////
 HistoryTable::HistoryTable() {
   ptr= 0;
-  isWithinThreshold = true;
 }
 
 void HistoryTable::push(int n) {
@@ -22,38 +19,16 @@ void HistoryTable::push(int n) {
   }
 }
 
-bool HistoryTable::chk_within_threshold() {
-  return isWithinThreshold;
-}
-
-bool HistoryTable::pred(const Perceptron &perc) {
-
-  int y = 0;
-  for (int i=0; i<HISTTBL_SIZE; i++) {
-    y += perc.get_val(i) * array[(i+ptr)%HISTTBL_SIZE];
-  }
-
-  // Bias (w0)
-  y+=perc.get_val(HISTTBL_SIZE);
-
-
-  isWithinThreshold = (-THRESHOLD <= y && y <= THRESHOLD);
-
-  bool res = (y>=0);
-
-  //printf("pred : %s\n", res?"true":"false");
-  return y>=0;
-}
 int HistoryTable::get_val(size_t idx) const {
   return array[(idx + ptr) % HISTTBL_SIZE];
 }
 
 /////////////////////////////////////////////////////////////
-int Perceptron::get_val(size_t idx) const {
+int NeuralNetwork::get_val(size_t idx) const {
   assert(0<=idx && idx < NPERC+1);
   return weights[idx];
 }
-void Perceptron::set_val(size_t idx, int n) {
+void NeuralNetwork::set_val(size_t idx, int n) {
   assert(0<=idx && idx < NPERC+1);
   if (n >= (1<<PERC_BITS)) {
     n = (1<<PERC_BITS) - 1;
@@ -62,8 +37,24 @@ void Perceptron::set_val(size_t idx, int n) {
   }
   weights[idx] = n;
 }
-void Perceptron::update(bool isTaken, const HistoryTable &history_table) {
-  
+int NeuralNetwork::pred(const HistoryTable &history_table) {
+  int y = 0;
+  for (int i=0; i<HISTTBL_SIZE; i++) {
+    y += get_val(i) * history_table.get_val(i);
+  }
+
+  // Bias
+  y +=get_val(HISTTBL_SIZE);
+  is_within_thr = (-THRESHOLD <= y && y <= THRESHOLD);
+
+#ifdef MY_DEBUG
+  printf("y =%d\n", y);
+#endif
+
+  return y>=0;
+}
+void NeuralNetwork::update(bool isTaken, const HistoryTable &history_table) {
+
   for (int i=0; i<NPERC; i++) {
     if (history_table.get_val(i) == (isTaken? 1 : -1)) {
       set_val(i, weights[i] + 1);
@@ -78,21 +69,26 @@ void Perceptron::update(bool isTaken, const HistoryTable &history_table) {
     set_val(NPERC, weights[NPERC] - 1);
   }
 
-  //printf("Perceptron weights: ");
+#ifdef MY_DEBUG
+  printf("Perceptron weights: ");
   for (int i=0; i<=NPERC; i++) {
-    //printf("%-3d", weights[i]);
+    printf("%-4d", weights[i]);
   }
-  //printf("\n");
-}
+  printf("\n");
+#endif
 
+}
+bool NeuralNetwork::get_is_within_thr(void) {
+  return is_within_thr;
+}
 /////////////////////////////////////////////////////////////
 
 size_t HashTable::hash(UINT64 idx) {
   size_t h_val = (idx ^ (idx >> 2)) % HTBL_SIZE;
-  //printf("Hash value: %u\n", h_val);
+
   return h_val;
 }
-Perceptron& HashTable::get(UINT64 idx) {
+NeuralNetwork& HashTable::get(UINT64 idx) {
   return perc[hash(idx)];
 }
 
@@ -106,7 +102,7 @@ PREDICTOR::PREDICTOR (void)
 bool
 PREDICTOR::GetPrediction (UINT64 PC)
 {
-    return global_history.pred(hash_perceptron.get(PC));
+    return hash_perceptron.get(PC).pred(global_history);
 }
 
 void
@@ -114,7 +110,7 @@ PREDICTOR::UpdatePredictor (UINT64 PC, OpType OPTYPE, bool resolveDir,
 			    bool predDir, UINT64 branchTarget)
 {
   if ((resolveDir != predDir) ||
-    (global_history.chk_within_threshold() == true) ) {
+    (hash_perceptron.get(PC).get_is_within_thr() == true) ) {
 
     hash_perceptron.get(PC).update(resolveDir, global_history);
   }
