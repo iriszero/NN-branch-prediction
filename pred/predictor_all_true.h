@@ -1,7 +1,7 @@
 #ifndef _PREDICTOR_H_
 #define _PREDICTOR_H_
 
-//#define MY_DEBUG
+// #define MY_DEBUG
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -11,16 +11,11 @@
 #include "utils.h"
 #include <vector>
 
-
-//// Neural Network Setting ////
-#define NN_D 32 // 32
-#define NN_N 1 // 8
-////////////////////////////////
-
-#define HISTTBL_SIZE NN_D
-#define HTBL_SIZE 256 // 128
+#define NPERC 64
+#define HISTTBL_SIZE NPERC
+#define HTBL_SIZE (128*4)
 #define PERC_BITS 8
-#define THRESHOLD ((2*HISTTBL_SIZE + 14) * (NN_N + 1))
+#define THRESHOLD (2*HISTTBL_SIZE + 14)
 
 class Perceptron;
 class HistoryTable {
@@ -35,19 +30,12 @@ public:
 
 class NeuralNetwork {
 private:
-  /* w1: [0-d][1-n] is actually used in HW implementation */
-  int w1[NN_D+1][NN_N+1];
-  int w2[NN_N+1];
-
-  /* Careful! This needs to be initialzed as zero for every iteration. It is
-  temporary stored for the update()*/
-  int h[NN_N+1];
-
+  int weights[NPERC+1];
   int recent_y;
   bool is_within_thr;
-  int make_within_range(int n) const;
 public:
-  NeuralNetwork();
+  int get_val(size_t idx) const;
+  void set_val(size_t idx, int n);
   int pred(const HistoryTable &history_table);
   void update(bool isTaken, const HistoryTable &history_table);
   bool get_is_within_thr(void);
