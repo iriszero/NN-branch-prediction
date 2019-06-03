@@ -12,7 +12,7 @@ num_parallel_jobs=16
 
 ###########  HOW TO RUN JOBS?  ################
 
-# The following line will launch sims for all workloads when you run ./doit.sh (comment it if you dont want it to) 
+# The following line will launch sims for all workloads when you run ./doit.sh (comment it if you dont want it to)
 
 time ./runall.pl -s ../sim/predictor -w all -f  $num_parallel_jobs -d ../results/AWS_RESULTS_SEZNEC_EVAL
 
