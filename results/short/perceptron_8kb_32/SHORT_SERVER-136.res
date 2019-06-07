@@ -1,0 +1,1 @@
+  MPKBr_1K         	 :   227.0000  MPKBr_10K         	 :    34.6000  MPKBr_100K         	 :    17.4600  MPKBr_1M         	 :    13.3450  MPKBr_10M         	 :    73.0958  MPKBr_30M         	 :   156.8492

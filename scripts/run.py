@@ -1,6 +1,7 @@
 import os
 import time
 import json
+from subprocess import Popen,PIPE,STDOUT,call
 
 methods = {
     'all_true' : [''],
@@ -15,7 +16,8 @@ methods = {
     "rnn" : [],
     "michaud" : [''],
 }
-modes = ["test", "temp", "random", "short", "long", "all"]
+
+modes = ["random", "all", "test", "temp", "short", "long"]
 
 num_parallel_jobs = 4
 
@@ -25,9 +27,13 @@ def run(mode):
         os.path.dirname(os.path.abspath(__file__)),
         os.pardir
     )
+
     execution_time = {}
+    amean = {}
+
     for k, v in methods.items():
         execution_time[k] = {}
+        amean[k] = {}
 
         os.chdir(f'{root_path}/sim')
 
@@ -39,6 +45,9 @@ def run(mode):
         os.symlink(f'pred/predictor_{k}.cc', 'predictor.cc')
 
         for params in v:
+            if os.path.exists(f'{root_path}/results/{mode}/{k}_{params}'):
+                continue
+
             os.chdir(f'{root_path}/sim')
             try:
                 os.unlink(f'predictor.h')
@@ -66,11 +75,22 @@ def run(mode):
             execution_time[k][params] = elapsed_time
             ###################################################################
 
-
             os.system(f'./getdata.pl -w {mode} -d ../results/{mode}/{k}_{params}')
+            ###################################################################
+            proc=Popen(f'./getamean.pl -w {mode} -d ../results/{mode}/{k}_{params}',
+            shell=True, stdout=PIPE, )
+            output=proc.communicate()[0]
+            _ = float(output.decode("utf-8") )
+            amean[k][params] = _
+            ###################################################################
 
     with open(f'{root_path}/results/{mode}/execution_time.json', 'w+') as v:
         v.write(json.dumps(execution_time))
+
+
+    with open(f'{root_path}/results/{mode}/amean.json', 'w+') as v:
+        v.write(json.dumps(amean))
+
 
 def main():
     for mode in modes:

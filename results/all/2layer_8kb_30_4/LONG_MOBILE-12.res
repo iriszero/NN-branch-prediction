@@ -1,0 +1,3 @@
+  MPKBr_1K         	 :   381.0000  MPKBr_10K         	 :   339.0000  MPKBr_100K         	 :   304.8700  MPKBr_1M         	 :   224.8330  MPKBr_10M         	 :   205.8405  MPKBr_30M         	 :   199.0856  MPKBr_60M         	 :   199.1829  MPKBr_100M         	 :   201.5564Edge sequence list access window overflow!
+
+  TRACE 	 : ../traces/LONG_MOBILE-12.bt9.trace.gz  NUM_INSTRUCTIONS            	 :  925056138  NUM_BR                      	 :  150242815  NUM_UNCOND_BR               	 :   60128077  NUM_CONDITIONAL_BR          	 :   90114738  NUM_MISPREDICTIONS          	 :   30154545  MISPRED_PER_1K_INST         	 :    32.5975
