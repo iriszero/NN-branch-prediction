@@ -1,0 +1,21 @@
+LONG_MOBILE-1       	       0.500 	
+LONG_MOBILE-4       	       0.005 	
+SHORT_MOBILE-25     	       0.002 	
+SHORT_MOBILE-2      	      21.272 	
+SHORT_MOBILE-4      	       5.000 	
+LONG_MOBILE-2       	       1.312 	
+SHORT_MOBILE-1      	       1.401 	
+SHORT_MOBILE-27     	       0.385 	
+SHORT_MOBILE-30     	       3.150 	
+LONG_MOBILE-3       	       6.972 	
+SHORT_MOBILE-24     	       0.001 	
+SHORT_MOBILE-28     	       0.011 	
+SHORT_MOBILE-3      	       3.688 	
+
+AMEAN               	       3.361 	
+
+
+real	1m58.995s
+user	4m38.146s
+sys	0m2.176s
+
