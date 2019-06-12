@@ -39,10 +39,10 @@ NeuralNetwork::NeuralNetwork() {
   }
 }
 int NeuralNetwork::make_within_range(int n) const {
-  if (n >= (1<<PERC_BITS)) {
-    n = (1<<PERC_BITS) - 1;
-  } else if (n < -(1<<PERC_BITS)) {
-    n = -(1<< PERC_BITS);
+  if (n >= (1<<(PERC_BITS-1))) {
+    n = (1<<(1<<(PERC_BITS-1)) - 1;
+  } else if (n < -(1<<(PERC_BITS-1)) {
+    n = -(1<< (1<<(PERC_BITS-1));
   }
   return n;
 }

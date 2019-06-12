@@ -30,10 +30,10 @@ int NeuralNetwork::get_val(size_t idx) const {
 }
 void NeuralNetwork::set_val(size_t idx, int n) {
   assert(0<=idx && idx < NPERC+1);
-  if (n >= (1<<PERC_BITS)) {
-    n = (1<<PERC_BITS) - 1;
-  } else if (n < -(1<<PERC_BITS)) {
-    n = -(1<< PERC_BITS);
+  if (n >= (1<< (PERC_BITS-1))) {
+    n = (1<< (PERC_BITS-1)) - 1;
+  } else if (n < -(1<< (PERC_BITS-1))) {
+    n = -(1<< (PERC_BITS-1));
   }
   weights[idx] = n;
 }
