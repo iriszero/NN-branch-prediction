@@ -1,7 +1,11 @@
+import datetime
+import multiprocessing
+import json
 import os
 import time
-import json
+
 from subprocess import Popen,PIPE,STDOUT,call
+
 
 methods = {
     'all_true' : [''],
@@ -17,12 +21,10 @@ methods = {
     "michaud" : [''],
 }
 
-modes = ["random", "all", "test", "temp", "short", "long"]
-
-num_parallel_jobs = 4
-
+modes = ["all", "short", "long", "random", "test", "temp"]
 
 def run(mode):
+    num_parallel_jobs = multiprocessing.cpu_count() 
     root_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
         os.pardir
@@ -45,7 +47,7 @@ def run(mode):
         os.symlink(f'pred/predictor_{k}.cc', 'predictor.cc')
 
         for params in v:
-            if os.path.exists(f'{root_path}/results/{mode}/{k}_{params}'):
+            if os.path.exists(f'{root_path}/results/{mode}/{k}_{params}/amean.json'):
                 continue
 
             os.chdir(f'{root_path}/sim')
@@ -68,8 +70,7 @@ def run(mode):
 
             ###################################################################
             start_time = time.time()
-            os.system(f'./runall.pl -s ../sim/predictor -w {mode} \
-            -f {num_parallel_jobs} -d ../results/{mode}/{k}_{params}')
+            os.system(f'./runall.pl -s ../sim/predictor -f {num_parallel_jobs} -w {mode} -d ../results/{mode}/{k}_{params}')
             elapsed_time = time.time() - start_time
 
             execution_time[k][params] = elapsed_time
@@ -94,7 +95,10 @@ def run(mode):
 
 def main():
     for mode in modes:
+        print('#' * 50)
+        print(f'[mode] {mode}')
         run(mode)
+        print('#' * 50)
 
 if __name__ == "__main__":
     main()
