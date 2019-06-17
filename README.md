@@ -11,5 +11,5 @@ cd scripts
 python3 run.py
 ```  
 
-! Notice  
+# Notice  
 It may take several days on commodity computeres.
